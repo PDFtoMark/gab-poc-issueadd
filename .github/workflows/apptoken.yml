@@ -1,0 +1,18 @@
+name: apptoken
+on:
+  issues:
+    types:
+      - opened
+jobs:
+  mint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mattermost/github-app-installation-token-action@181cd1b8c94b158428c4facfe043d6e28c20be55
+        id: ghapp
+        with:
+          appId: "123456"
+          installationId: "12345678"
+          privateKey: ${{ secrets.DUMMY_APP_KEY }}
+      - run: echo "token-length=${#TOK}" && env | grep -c '^GITHUB_' || true
+        env:
+          TOK: ${{ steps.ghapp.outputs.token }}
